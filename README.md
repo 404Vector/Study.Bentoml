@@ -11,7 +11,6 @@ curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.s
 sudo apt-get install git-lfs
 ```
 
-
 ## 환경 설정
 
 ```shell
@@ -20,9 +19,20 @@ poetry install
 pip install -r requirements.txt
 ```
 
-## Frontend + Backend
+## Packing service
+```shell
+cd Service
+python bento_packer.py
+```
+
+## Run Frontend
 
 ```shell
-bentoml serve MaskAPIService:latest
-python -m streamlit run app/frontend.py
+python -m streamlit run App/frontend.py
+```
+
+## Run Backend
+
+```shell
+bentoml serve MaskGenderAgeClassifierService:latest
 ```
