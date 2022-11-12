@@ -1,23 +1,16 @@
 # bento_service.py
 import pandas as pd
-
+import numpy as np
+from modules import *
 from bentoml import env, artifacts, api, BentoService
-from bentoml.adapters import DataframeInput
-from bentoml.frameworks.sklearn import SklearnModelArtifact
+from bentoml.adapters import ImageInput
+from bentoml.frameworks.pytorch import PytorchModelArtifact
 
-
-@env(infer_pip_packages=True)
-@artifacts([SklearnModelArtifact('model')])
-class IrisClassifier(BentoService):
-    """
-    A minimum prediction service exposing a Scikit-learn model
-    """
-
-    @api(input=DataframeInput(), batch=True)
-    def predict(self, df: pd.DataFrame):
-        """
-        An inference API named `predict` with Dataframe input adapter, which codifies
-        how HTTP requests or CSV files are converted to a pandas Dataframe object as the
-        inference API function input
-        """
-        return self.artifacts.model.predict(df)
+@env(infer_pip_packages=True) # 필요 package 자동 추론
+@artifacts([PytorchModelArtifact('model')]) # 사용 모델 지정
+class MaskGenderAgeClassifierService(BentoService):
+    @api(input=ImageInput(), batch=True)
+    def predict(self, data):
+        images = transform_image(data)
+        preds = self.artifacts.model.predict(images)
+        return preds
