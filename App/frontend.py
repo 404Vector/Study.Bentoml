@@ -7,9 +7,10 @@ import yaml
 from PIL import Image
 
 import streamlit as st
+from decoder import decoder
 
 # SETTING PAGE CONFIG TO WIDE MODE
-from app.confirm_button_hack import cache_on_button_press
+from App.confirm_button_hack import cache_on_button_press
 
 ASSETS_DIR_PATH = os.path.join(Path(__file__).parent.parent.parent.parent, "assets")
 
@@ -35,7 +36,7 @@ def main():
         ]
         response = requests.post("http://localhost:5000/predict", files=files)
         label = response.json()
-        st.write(f'label is {label}')
+        st.write(f'label is {decoder[label]}')
 
 
 @cache_on_button_press('Authenticate')
