@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import numpy as np
 from torchvision import models
 from typing import Tuple
 
@@ -12,6 +13,11 @@ class VIT_V1_KHS(nn.Module):
     def forward(self, x):
         x = self.backborn(x)
         return x
+
+    def predict(self, data):
+        preds = self.forward(data)
+        preds = torch.argmax(preds, dim=1).detach().numpy().tolist()
+        return preds
 
 def load_model(save_point) -> VIT_V1_KHS:
     model = VIT_V1_KHS()
