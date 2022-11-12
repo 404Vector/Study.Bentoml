@@ -8,8 +8,14 @@ class SavePoint():
         self.args = loaded_dict['args']
         self.save_time = loaded_dict['save_time']
 
-def load_savepoint(config_path:str) -> SavePoint:
-    with open(config_path) as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
-    savepoint = torch.load(config["model_path"], map_location='cpu')
+def load_savepoint(path:str) -> SavePoint:
+    savepoint = torch.load(path, map_location='cpu')
     return SavePoint(savepoint)
+
+def save_savepoint(savepoint, target_path:str):
+    torch.save({
+        'model': savepoint.weights, 
+        'optim': savepoint.optim, 
+        'args': savepoint.args, 
+        'save_time': savepoint.save_time,
+    }, target_path)
